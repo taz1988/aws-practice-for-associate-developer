@@ -51,4 +51,20 @@ After we created the launch configuration, we have to use it. We have to create 
 * http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html
 * http://docs.aws.amazon.com/autoscaling/latest/userguide/as-scale-based-on-demand.html
 * http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elb-cloudwatch-metrics.html
+* http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/AlarmThatSendsEmail.html
+
+## Auto scaling based on SQS state
+
+**Business scenario:** We have a job, which do some processing, which is time consuming. This reason we want to use it in an async way, so we use SQS service to store the process requests. Based on the number of messages in the SQS we want to start more servers in order to make more quicker the processing. 
+
+**Possible solution:** Similarly we create an auto scaling group, which use the SQS service. Before creating the auto service group, we set-up the SQS and alarms for it.
+
+
+###Resources
+* http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/QueuePermissions.html
+* https://github.com/aws/aws-sdk-java
+* http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/WorkingWithSQS.html
+* https://github.com/aws/aws-sdk-java/tree/master/src/samples
+
+
 
