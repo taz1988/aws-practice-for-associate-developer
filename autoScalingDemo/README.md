@@ -66,5 +66,51 @@ After we created the launch configuration, we have to use it. We have to create 
 * http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/WorkingWithSQS.html
 * https://github.com/aws/aws-sdk-java/tree/master/src/samples
 
+## Auto scaling witch docker images
+
+**Business scenario:** It is the same, as the first case, but we want to use docker images for the simpler release. 
+
+**Possible solution:** Wrap our application to a docker container, and implement an EC2 container auto scaling group solution for it.
+
+###Create docker image
+This is the content of the Dockerfile
+```
+FROM ubuntu
+COPY target/autoScalingDemo-0.0.1-SNAPSHOT.jar /var/
+RUN apt-get update
+RUN apt-get install -y openjdk-8-jre 
+CMD java -jar /var/autoScalingDemo-0.0.1-SNAPSHOT.jar
+```
+
+###Configure a docker repository
+Docker repository is responsible to store docker containers. It is a version control system basically for docker containers. Usually we use private repositories to store our application containers.
+In order to be able to push a container to the repository, you have to install the aws cli!
+
+After you have installed aws cli, you have to use the following commands:
+```
+aws configure
+aws ecr get-login
+docker build -t auto-scaling-demo .
+docker tag auto-scaling-demo:latest 166245936529.dkr.ecr.eu-west-1.amazonaws.com/demo-repository:latest
+docker push 166245936529.dkr.ecr.eu-west-1.amazonaws.com/demo-repository:latest
+```
+
+###Create cluster
+First we have to create a docker cluster, which contains ec2 instances and other settings, for running docker images. A cluster will execute services
+
+###Create a task definition
+We create a task definition, which is a description of an application that contains one or more container definitions. 
+
+###Create service
+Last we have to create a service for 
+
+###Resources
+* http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
+* https://docs.docker.com/engine/
+* https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
+* https://docs.docker.com/engine/reference/builder/
+* http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+
+
 
 
