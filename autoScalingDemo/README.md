@@ -72,7 +72,13 @@ After we created the launch configuration, we have to use it. We have to create 
 
 **Possible solution:** Wrap our application to a docker container, and implement an EC2 container auto scaling group solution for it.
 
-###Create docker image
+##The general process of using docker images with AWS
+![general_process](docker_usage.png)
+
+##How ECS works
+![how it works](how_amazon_ecs_works.png)
+
+###Create and build docker image
 This is the content of the Dockerfile
 ```
 FROM ubuntu
@@ -91,18 +97,31 @@ After you have installed aws cli, you have to use the following commands:
 aws configure
 aws ecr get-login
 docker build -t auto-scaling-demo .
-docker tag auto-scaling-demo:latest 166245936529.dkr.ecr.eu-west-1.amazonaws.com/demo-repository:latest
+docker tag auto-scaling-demo:latest 166245936529.dkr.ecr.eu-west-1.amazonaws.com/demo-repository:auto-scaling-demo
 docker push 166245936529.dkr.ecr.eu-west-1.amazonaws.com/demo-repository:latest
 ```
 
 ###Create cluster
-First we have to create a docker cluster, which contains ec2 instances and other settings, for running docker images. A cluster will execute services
+First we have to create a docker cluster, which contains ec2 instances and other settings, for running docker images.
+
+For this, you have to create a cluster, you have to create an IAM role, and after that, you have to start an Ec2 instance or an auto scaling group.
+
+First you have to define the proper role for the ec2 instances, otherwise they can't connect to the docker cluster.
+
+When you start a new instance, you have to define the content of the ecs.config
+```
+#!/bin/bash
+echo ECS_CLUSTER=your_cluster_name >> /etc/ecs/ecs.config
+```
+
+###Create load balancer and alarms
+We should create a load balancer and alarms in order to be able to use them, when create the service.
 
 ###Create a task definition
 We create a task definition, which is a description of an application that contains one or more container definitions. 
 
 ###Create service
-Last we have to create a service for 
+Last we have to create a service for the task definition.
 
 ###Resources
 * http://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html
@@ -110,6 +129,11 @@ Last we have to create a service for
 * https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/
 * https://docs.docker.com/engine/reference/builder/
 * http://docs.aws.amazon.com/cli/latest/userguide/installing.html
+* http://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_how-users-sign-in.html
+* http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html
+* https://forums.aws.amazon.com/thread.jspa?threadID=230106
+
+
 
 
 
