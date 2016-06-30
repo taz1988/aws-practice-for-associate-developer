@@ -66,7 +66,7 @@ After we created the launch configuration, we have to use it. We have to create 
 * http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/WorkingWithSQS.html
 * https://github.com/aws/aws-sdk-java/tree/master/src/samples
 
-## Auto scaling witch docker images
+## Auto scaling with docker images
 
 **Business scenario:** It is the same, as the first case, but we want to use docker images for the simpler release. 
 
